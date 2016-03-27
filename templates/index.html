@@ -1,0 +1,495 @@
+<!doctype html>
+<head>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+</style>
+</head>
+
+<body>
+<title>Laptop Store</title>
+<img src="http://portal.seas.columbia.edu/seas/logos/NewEngineeringDkBlue.png" alt="Columbia" style="width:30%">
+<h2>Welcom to My Laptop Store!</h2>
+<p>Database Project by Shanqi Lu (sl4017), Chenxi Rao (cr2832)</p>
+
+{% if not session.logged_in %}
+</p>
+<a href="{{ url_for('login') }}">Login</a>
+<a href="{{ url_for('signup') }}">Sign Up</a>
+{% else %}
+<p>Hello, Customer: {{cid}}</p>
+<p><a href="{{ url_for('logout') }}">Logout</a></p>
+
+<form action="{{ url_for('index') }}" method="POST">
+
+<input type="submit" name="subject" value="My Payment Methods">
+<input type="submit" name="subject" value="My Orders">
+<input type="submit" name="subject" value="My Shopping Cart">
+<input type="submit" name="subject" value="Show All Products">
+<input type="submit" name="subject" value="Comments and Feedbacks">
+<input type="submit" name="subject" value="Hide All">
+
+</form>
+
+
+{% endif %}
+
+<!-- ~~~~~~~~~~~Notice~~~~~~~~~~~~~~~~~~~~~ -->
+{% if notice %}
+<p>{{notice}}</p>
+{% endif %}
+<!-- ~~~~~~~~~~~Notice~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!-- ~~~~~~~~~~~Comments and feedbacks~~~~~~~~~~~~~~~~~~~~~ -->
+
+{% if cf %}
+<p>Enter a Laptop ID to see its seller and corresponding comments and feedbacks</p>
+<form action="{{ url_for('index') }}" method="POST">
+    <dt><input type="text" name="subject2comments">
+    <dt><input type="submit" name="subject2" value="Show comments">
+</form>
+
+{% if comment_notice %}
+{{comment_notice}}
+{% endif %}
+
+
+
+{% if comments %}
+<p>Comments to the laptop</p>
+<table style="width:100%">
+  <tr>
+    <th>Star(rating 1-5) </th>
+    <th>Content</th>
+    <th>Customer Name</th>
+  </tr>
+  {% for comment in comments %}
+  <tr>
+    <td>{{comment.star}}</td>
+    <td>{{comment.content}}</td>
+    <td>{{comment.name}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+{% if seller %}
+<p>The Seller of this laptop is:</p>
+<table style="width:100%">
+  <tr>
+    <th>Seller ID </th>
+    <th>Seller Name</th>
+  </tr>
+  <tr>
+    <td>{{seller.sid}}</td>
+    <td>{{seller.sname}}</td>
+  </tr>
+</table>
+{% endif %}
+
+{% if feedbacks %}
+</p>
+<p>Feedbacks to seller</p>
+<table style="width:100%">
+  <tr>
+    <th>Delivery Speed(1-10 higher is better)</th>
+    <th>Product Quality(1-10 higher is better)</th>
+    <th>Feedback Content</th>
+    <th>From Customer</th>
+  </tr>
+  {% for feedback in feedbacks %}
+  <tr>
+    <td>{{feedback.deliveryspeed}}</td>
+    <td>{{feedback.productquality}}</td>
+    <td>{{feedback.feedbackcontent}}</td>
+    <td>{{feedback.name}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+
+<form action="{{ url_for('index') }}" method="POST">
+    <dt><input type="submit" name="subject2" value="Show my comments and feedbacks">
+</form>
+
+{% if show_my_cf %}
+
+<p>Your comments to laptops</p>
+<table style="width:100%">
+  <tr>
+    <th>Star(rating 1-5) </th>
+    <th>Content</th>
+    <th>To Laptop ID</th>
+    <th>Laptop Model</th>
+  </tr>
+  {% for my_comment in my_comments %}
+  <tr>
+    <td>{{my_comment.star}}</td>
+    <td>{{my_comment.content}}</td>
+    <td>{{my_comment.lid}}</td>
+    <td>{{my_comment.model}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+<p>Your feedbacks to sellers</p>
+<table style="width:100%">
+  <tr>
+    <th>Delivery Speed(1-10 higher is better)</th>
+    <th>Product Quality(1-10 higher is better)</th>
+    <th>Feedback Content</th>
+    <th>To Seller ID</th>
+    <th>Seller Name</th>
+  </tr>
+  {% for my_feedback in my_feedbacks %}
+  <tr>
+    <td>{{my_feedback.deliveryspeed}}</td>
+    <td>{{my_feedback.productquality}}</td>
+    <td>{{my_feedback.feedbackcontent}}</td>
+    <td>{{my_feedback.sid}}</td>
+    <td>{{my_feedback.sname}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+{% endif %}
+<!-- ~~~~~~~~~~~Comments and feedbacks~~~~~~~~~~~~~~~~~~~~~ -->
+
+
+<!-- ~~~~~~~~~~~Shopping Cart~~~~~~~~~~~~~~~~~~~~~ -->
+{% if cart_laptops %}
+<table style="width:100%">
+  <caption>Your Shopping Cart Contains</caption>
+  <tr>
+    <th>Laptop ID</th>
+    <th>Model Name</th>
+    <th>Price</th>
+    <th>Quantity</th>
+  </tr>
+  {% for cart_laptop in cart_laptops %}
+  <tr>
+    <td>{{cart_laptop.lid}}</td>
+    <td>{{cart_laptop.model}}</td>
+    <td>{{cart_laptop.price}}</td>
+    <td>{{cart_laptop.cartquantity}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+<p>Delete Items from my shopping cart</p>
+<form action="{{ url_for('index') }}" method="POST">
+    <dt><input type="text" name="subject2cartdelete">
+    <dt><input type="submit" name="subject2" value="Delete this item">
+</form>
+{% if cartdelete_notice %}
+{{cartdelete_notice}}
+{% endif %}
+
+</p>
+</p>
+<form action="{{ url_for('index') }}" method="POST">
+<input type="submit" name="subject2" value="Proceed to checkout">
+</form>
+
+
+
+{% if proceed %}
+<p>Your default payment method is:</p>
+<p>{{defaultpay}}</p>
+
+<p>Are you ready to place your order?</p>
+<form action="{{ url_for('index') }}" method="POST">
+<input type="submit" name="subject2" value="Place your order">
+</form>
+{% endif %}
+
+{% endif %}
+<!-- ~~~~~~~~~~~Shopping Cart~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!-- ~~~~~~~~~~~Orders~~~~~~~~~~~~~~~~~~~~~ -->
+{% if orders %}
+<h>Your Orders</h>
+{% for order in orders %}
+<table style="width:100%">
+  <tr>
+    <th>Order ID: {{order.orid}}</th>
+    <th>Order Date: {{order.ordate}}</th>
+  </tr> 
+  <tr>
+    <th>Paid By: {{order.cardnumber}}</th>
+    <th>Paid Date: {{order.paiddate}}</th>
+  </tr>
+  <tr>
+    <th>Total Price: {{order.total_price}}</th>
+  </tr>
+</table>
+</p>
+{% endfor %}
+
+
+<p>Show Details</p>
+<form action="{{ url_for('index') }}" method="POST">
+    <dt>Please Enter an order ID to show details:
+    <dt><input type="text" name="subject2oid">
+    <dt><input type="submit" name="subject2" value="Show Oder Details">
+</form>
+
+    {% if myorder_error %} 
+    <h>{{myorder_error}}</h>
+    {% else %}
+    {% if order_laptops %}
+    <table style="width:100%">
+      <caption>This Order Contains</caption>
+      <tr>
+        <th>Laptop ID</th>
+        <th>Model Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+      </tr>
+      {% for order_laptop in order_laptops %}
+      <tr>
+        <td>{{order_laptop.lid}}</td>
+        <td>{{order_laptop.model}}</td>
+        <td>{{order_laptop.price}}</td>
+        <td>{{order_laptop.listquantity}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+    {% endif %}
+
+</p>
+<p>Write Comments and Feedbacks</p>
+<form action="{{ url_for('index') }}" method="POST">
+    <dt>Please Enter an order ID to leave comments and feedbacks:
+    <dt><input type="text" name="subject2oidforcf">
+    <dt><input type="submit" name="subject2" value="Leave comments and feedbacks">
+</form>
+
+{% if cf_notice %}
+{{cf_notice}}
+{% endif %}
+
+{% endif %}
+
+{% if cforder %}
+<h>Your will leave comments and feedbacks to this order</h>
+<table style="width:100%">
+  <tr>
+    <th>Order ID: {{cforder.orid}}</th>
+    <th>Order Date: {{cforder.ordate}}</th>
+  </tr> 
+  <tr>
+    <th>Paid By: {{cforder.cardnumber}}</th>
+    <th>Paid Date: {{cforder.paiddate}}</th>
+  </tr>
+  <tr>
+    <th>Total Price: {{cforder.total_price}}</th>
+  </tr>
+</table>
+</p>
+<p>This order contains</p>
+    <table style="width:100%">
+      <tr>
+        <th>Laptop ID</th>
+        <th>Model Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Seller ID</th>
+        <th>Seller Name</th>
+      </tr>
+      {% for cflaptop in cflaptops %}
+      <tr>
+        <td>{{cflaptop.lid}}</td>
+        <td>{{cflaptop.model}}</td>
+        <td>{{cflaptop.price}}</td>
+        <td>{{cflaptop.listquantity}}</td>
+        <td>{{cflaptop.sid}}</td>
+        <td>{{cflaptop.sname}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+</p>
+</p>
+</p>
+{% if cfinputs %}
+<form action="{{ url_for('index') }}" method="POST">
+    <dt>Please Enter a laptop ID to rate and leave a comment :
+    <dt><input type="text" name="subject2lidforcf">
+    <dt><input type="submit" name="subject2" value="Leave a comment to this laptop">
+</form>
+{% if gotoc_notice %}
+{{gotoc_notice}}
+</p>
+{% endif %}
+{% if gotoc %}
+<input type="text" id="text" name="text_name" style="width: 300%" />
+{% endif %}
+
+
+</p>
+<form action="{{ url_for('index') }}" method="POST">
+    <dt>Please Enter a Seller ID to rate and leave a feedback :
+    <dt><input type="text" name="subject2sidforcf">
+    <dt><input type="submit" name="subject2" value="Leave a feedback to this seller">
+</form>
+{% if gotof_notice %}
+{{gotof_notice}}
+{% endif %}
+{% endif %}<!-- ~~~~~~~~~~~end if cf inputs~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+
+{% if gotocflag %}
+<p>You are leaving a comment to the laptop : {{gotocflag}}</p>
+
+<form action="{{ url_for('index') }}" method="POST">
+    <dt>Please rate(integer from 1 to 5,  higher is better)
+    <dt><input type="text" name="star">
+    <dt>Leave a comment here
+    <dt><input type="text" name="comment" style="width: 50%">
+    <dt><input type="submit" name="subject2" value="Submit the comment">
+</form>
+{% if cfsubmit_notice %}
+{{cfsubmit_notice}}
+{% endif %}
+
+{% endif %}<!-- ~~~~~~~~~~~end goto c flag~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+{% if gotofflag %}
+<p>You are leaving a comment to the seller: {{gotofflag}}</p>
+
+<form action="{{ url_for('index') }}" method="POST">
+    <dt>Please rate(integer from 1 to 10,  higher is better)
+    <dt>delivery speed
+    <dt><input type="text" name="deliveryspeed">
+    <dt>productquality
+    <dt><input type="text" name="productquality">
+
+    <dt>Leave a feedback here
+    <dt><input type="text" name="feedback" style="width: 50%">
+    <dt><input type="submit" name="subject2" value="Submit the feedback">
+</form>
+{% if cfsubmit_notice %}
+{{cfsubmit_notice}}
+{% endif %}
+{% endif %}<!-- ~~~~~~~~~~~end goto f flag~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+
+{% endif %}<!-- ~~~~~~~~~~~end if cf order~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!-- ~~~~~~~~~~~Orders~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!-- ~~~~~~~~~~~Payment Methods~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+{% if paymethods %}
+<table style="width:100%">
+  <caption>Your Payment Methods</caption>
+  <tr>
+    <th>Card Number </th>
+    <th>Card Holder</th>
+    <th>Expiry Date</th>
+  </tr>
+  {% for pay in paymethods %}
+  <tr>
+    <td>{{pay.cardnumber}}</td>
+    <td>{{pay.cardholder}}</td>
+    <td>{{pay.expirydate}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<p>Your default payment method is:</p>
+<p>{{defaultpay}}</p>
+
+<p>Change your defualt card to:</p>
+<form action="{{ url_for('index') }}" method="POST">
+<input type="text" name="subject2changeto">
+<input type="submit" name="subject2" value="Change Default Payment Method">
+</form>
+{% if changepay_notice %}
+<p>{{changepay_notice}}</p>
+{% endif %}
+
+
+<p>Delete a payment method(you must have at least one payment method) :</p>
+<form action="{{ url_for('index') }}" method="POST">
+<input type="text" name="subject2deletecard">
+<input type="submit" name="subject2" value="Delete this card">
+</form>
+{% if deletecard_notice %}
+<p>{{deletecard_notice}}</p>
+{% endif %}
+
+
+
+
+</p>
+</p>
+<h>You can add payment methods below</h>
+{% if addpay_notice %}
+<p>{{addpay_notice}}</p>
+{% endif %}
+
+<form action="{{ url_for('index') }}" method="POST">
+    <dt>Card Number:
+    <dt><input type="text" name="subject2cardnumber">
+    <dt>Card Holder:
+    <dt><input type="text" name="subject2cardholder">
+    <dt>Expiry Date yyyy-mm-dd:
+    <dt><input type="text" name="subject2expirydate">
+    <dt><input type="submit" name="subject2" value="Add Payment Method">
+</form>
+
+
+
+{% endif %}
+<!-- ~~~~~~~~~~~Payment Methods~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<!-- ~~~~~~~~~~~Laptops~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+{% if laptops %}
+<table style="width:100%">
+  <caption>Our Laptops</caption>
+  <tr>
+    <th>Laptop ID</th>
+    <th>Model Name</th>
+    <th>Price</th>
+  </tr>
+  {% for laptop in laptops %}
+  <tr>
+    <td>{{laptop.lid}}</td>
+    <td>{{laptop.model}}</td>
+    <td>{{laptop.price}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+</p>
+<p>Add laptops to your cart</p>
+
+<form action="{{ url_for('index') }}" method="POST">
+    <dt>Please enter a Laptop ID:
+    <dt><input type="text" name="subject2cartlaptopid">
+    <dt><input type="submit" name="subject2" value="Add Laptop to Cart">
+</form>
+
+{% if addcart_notice %}
+<p>{{addcart_notice}}</p>
+{% endif %}
+
+
+{% endif %}
+<!-- ~~~~~~~~~~~Laptops~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+</body>
+
+
+
+

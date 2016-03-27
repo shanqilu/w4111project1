@@ -1,0 +1,26 @@
+<img src="http://portal.seas.columbia.edu/seas/logos/NewEngineeringDkBlue.png" alt="Columbia" style="width:30%">
+<h2>Welcom to My Laptop Store!</h2>
+<p>Database Project by Shanqi Lu (sl4017), Chenxi Rao (cr2832)</p>
+</p>
+{% block body %}
+  <h3>Create Customer Account</h3>
+  {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('signup') }}" method="POST">
+    <dl>
+      <dt>Customer ID:
+      <dd><input type="text" name="cid">
+      <dt>Password:
+      <dd><input type="password" name="password">
+      <dt>Your Name:
+      <dd><input type="text" name="name">
+      <dt>Card Number:
+      <dd><input type="text" name="cardnumber">
+      <dt>Card holder:
+      <dd><input type="text" name="cardholder">
+      <dt>Expiry Date YYYY-MM-DD:
+      <dd><input type="text" name="expirydate">
+      <dd><input type="submit" value="signup">
+    </dl>
+  </form>
+  <a href="{{ url_for('index') }}">Back to Home Page</a>
+{% endblock %}

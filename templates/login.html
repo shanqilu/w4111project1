@@ -1,0 +1,25 @@
+<title>Laptop Store</title>
+<img src="http://portal.seas.columbia.edu/seas/logos/NewEngineeringDkBlue.png" alt="Columbia" style="width:30%">
+<h2>Welcom to My Laptop Store!</h2>
+<p>Database Project by Shanqi Lu (sl4017), Chenxi Rao (cr2832)</p>
+
+{% block body %}
+  <h3>Login</h3>
+  {% if error %}<p class="error"><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('login') }}" method="POST">
+    <dl>
+      <dt>Customer ID:
+      <dd><input type="text" name="cid">
+      <dt>Password:
+      <dd><input type="password" name="password">
+      <dd><input type="submit" value="Login">
+    </dl>
+  </form>
+  <form action="{{ url_for('signup')}}">
+    <dl>
+      <dt>Don't have account?
+      <dd><input type="submit" value="SignUp">
+    </dl>    
+  </form>
+{% endblock %}
+<a href="{{ url_for('index') }}">Back to Home Page</a>
