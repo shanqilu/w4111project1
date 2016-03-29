@@ -466,6 +466,7 @@ def index():
                 if str(sidforcf)==str(i.sid):
                     sidforcf_exists =True
             if sidforcf_exists == False:
+                cfinputs = True
                 gotof_notice = "Cannot find this Seller in this order!"
                 return render_template('index.html', cid = str(session['cid']), cforder = cforder , cflaptops = cflaptops, cfinputs = cfinputs,gotof_notice=gotof_notice)
             else:
