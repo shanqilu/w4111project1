@@ -502,8 +502,8 @@ def index():
             feedback = str(request.form.get("feedback",None))
 
             if IsRating(deliveryspeed)== False or IsRating(productquality) == False:
-                cfsubmit_notice = "Please enter a correct rating number(integer from 1 to 5)"
-                return render_template('index.html', cid = str(session['cid']), cforder = cforder , cflaptops = cflaptops,gotocflag = gotocflag, cfsubmit_notice = cfsubmit_notice)
+                cfsubmit_notice = "Please enter a correct rating number(integer from 1 to 10)"
+                return render_template('index.html', cid = str(session['cid']), cforder = cforder , cflaptops = cflaptops,gotofflag = gotofflag, cfsubmit_notice = cfsubmit_notice)
             else:
                 q= "select max(f.feedbackid) from feedback_combine f;"
                 cursor = g.conn.execute(q)
